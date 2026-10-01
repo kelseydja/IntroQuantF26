@@ -438,7 +438,7 @@ VisitorGraph2
 Let's try another:
 
 ```{r}
-VisBoxplot <- ggplot(df5) + 
+VisBoxplot <- ggplot(df5) +  
   aes(x = Code, y = kVis) +
   geom_boxplot(aes(fill = Code)) +
   theme_bw() +

@@ -36,27 +36,18 @@ Outside the chunk you can write anything you want.
 
 Command + Alt + I generates a new "chunk". Try it here! (or Ctrl + Alt + I for PC)
 
-```{r}
-hahah <- 1
-hahah
-```
-
 When assigning a value to an object, R does not print anything. You can force R to print the value by using parentheses or by typing the object name. Run the lines in the next chunk one at a time to see the difference in the output.
 
 ```{r}
 5
-x <- 5
-(x <- 5)
 
-x
+
 
 ```
 
 ```{r}
 # objects can store more than one value in a one dimensional vector
-my_vector <- c(1, 4, 5,6,8)
-
-my_vector*2
+my_vector <- c()
 ```
 
 Whole **data frames** can also be assigned to objects. MPG is one that comes built in with the tidyverse package and describes specs of different models of car.
@@ -68,24 +59,24 @@ Remember, **packages** are bundles of code and functions that other people have 
 penguins
 
 # You only need to install a package once on your computer (like buying a book)
-install.packages("palmerpenguins")
+install.packages()
 
-install.packages("rmarkdown")
+install.packages()
 
 # Each time you reopen R however, you need to call the packages you're using fresh from the library
-library(palmerpenguins)
+library()
 
 # Then you can access the data frames and functions stored in the package :) 
-penguins
+
 
 ```
 
 **tidyverse** is a very popular package that we will use functions from a lot, and is actually a collection of packages. One of the packages in it is **ggplot2**, which makes it very easy to make very nice looking plots.
 
 ```{r}
-install.packages("tidyverse")
+install.packages()
 
-library(tidyverse)
+library()
 
 mpg
 
@@ -98,10 +89,8 @@ But come on, there's time for all that boring stuff later, you said we could mak
 The **fivethirtyeight** package contains data sets written about on the FiveThirtyEight blog. We're going to play with a data set of popular Halloween candies, their characteristics and how popular they are, as assessed in survey data.
 
 ```{r}
-install.packages("fivethirtyeight")
-library(fivethirtyeight)
-
-fivethirtyeight::
+install.packages()
+library()
 ```
 
 What are some ways we can look at this dataset?
@@ -111,15 +100,15 @@ candy_rankings
 ```
 
 ```{r}
-head(candy_rankings)
+head()
 ```
 
 ```{r}
-glimpse(candy_rankings)
+glimpse()
 ```
 
 ```{r}
-View(candy_rankings)
+View()
 ```
 
 ## GGPLOTS: The Basic format
@@ -155,25 +144,19 @@ ggplot() # this line makes the space to put the plot, the background
 ```
 
 ```{r}
-ggplot(candy_rankings) + 
-  aes(x = chocolate) # this says what to put on the axes
+ggplot() + 
+  aes(x = ) # this says what to put on the axes
 ```
 
 ```{r}
-ggplot(candy_rankings) + 
-  aes(x = chocolate) + 
-  geom_bar()
-  # this says what kind of plot to make, in this case, a barplot that automatically did counts of the observations of which candies were chocolate or not chocolate. 
+ggplot() # this says what kind of plot to make, in this case, a barplot that automatically did counts of the observations of which candies were chocolate or not chocolate. 
 ```
 
 ggplots can be defined as an object and recalled later too. This is useful when you are adding more layers and trying things out, or when you're compiling the plots into a multiple plot figure or exporting them.
 
 ```{r}
-chocolate_bar <- ggplot(candy_rankings) + 
-  aes(x = chocolate) + 
-  geom_bar()
+chocolate_bar <- 
 
-chocolate_bar
 ```
 
 Challenge: In the chunk below, plot a different variable, [without copying and pasting the script you wrote before]{.underline}.
@@ -189,11 +172,10 @@ For example, here we've plotted the win percentage (how often people ranked it i
 We're using the **geom_point()** function to plot this as a scatter plot.
 
 ```{r}
-sweetness <- ggplot(candy_rankings) + 
-  aes(x = sugarpercent, y = winpercent) +
-  geom_point()
+sweetness <- ggplot() + 
+  aes(x = , y = ) + 
 
-sweetness
+
 
 ```
 
@@ -201,26 +183,20 @@ To add a best-fit regression line, we can use the **geom_smooth()** function. Th
 
 ```{r}
 sweetness + 
-  geom_smooth(method = "lm")
+  geom_smooth()
 ```
 
 If we'd like to compare sweetness across a categorical variable, like chocolate or not chocolate, we can use a **box and whisker plot**, generated with **geom_boxplot()**. What question is this plot asking?
 
 ```{r}
-sweetness <- ggplot(candy_rankings) + 
-  aes(x = chocolate, y = sugarpercent) + 
-  geom_boxplot()
-
+sweetness <- ggplot()
 sweetness
 ```
 
 Finally, let's try making a histogram - this only takes an input argument for the x axis.
 
 ```{r}
-sweethist <- ggplot(candy_rankings) + 
-  aes(x = sugarpercent) + 
-  geom_histogram()
-
+sweethist <- ggplot()
 sweethist
 ```
 

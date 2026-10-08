@@ -50,32 +50,35 @@ library(tidyverse)
 ### Example using summarize to make a nice summary table of some old owl limpet data:
 
 ```{r}
-Size_summary <-  %>% 
-  group_by() 
-  summarize(), # mean 
-            sd_size = ,  # standard deviation
-            n = , # count
-            se_size =  # standard error
-  mutate_at(), # bonus line to reduce digits
-            .funs = ) 
+Size_summary <- CCdata_tidy |> 
+  group_by(Impact, Year, Season, Survey_Date) |> 
+  summarize(
+    mean_size = mean(Size, na.rm = TRUE), # mean 
+            sd_size = sd(Size, na.rm = TRUE),  # standard deviation
+            n = n(), # count
+            se_size = sd_size/sqrt(n)) |>  # standard error
+ 
+   mutate_at(vars(mean_size, sd_size, se_size), # bonus line to reduce digits
+            .funs = round, 2) 
 
-Size_summary %>% 
-  select() 
-  knitr
+Size_summary |> 
+  select(-Survey_Date) |>  
+  knitr:: kable()
 ```
 
 #### Example creating a plot from that summary data:
 
 ```{r}
-Size_summary  + 
-  aes(x = , y = , fill = ) + 
-#  geom_point(position = position_dodge(0.9)) +
-geom_col() +
-  geom_errorbar(aes(, 
-                    ), 
-                position = , 
-                width = 
-                )
+Size_summary |> 
+  ggplot() +
+  aes(x = as.factor(Survey_Date), y = mean_size, fill = Impact)+ 
+  geom_col(position = position_dodge())+
+  
+  geom_errorbar(aes(ymin = mean_size -se_size, ymax = mean_size +se_size), 
+     # position = position_dodge(0.9) +
+      width = 0.2)
+  geom_line(aes(group = impact))
+
 ```
 
 #### Beyond the summary stats: frequency distributions
@@ -83,42 +86,48 @@ geom_col() +
 Boiling it down to the mean and standard deviation really loses a lot of information though. It's always good to look at the histogram/distribution to get a better sense of what's going on. Let's look back at just that one histogram.
 
 ```{r}
-CC_sp19 <-
-  filter(Season ==  Year == Impact == )
+CC_sp19 <- CCdata_tidy |> 
+  filter(Season == "Spring" & Year == 2019 & Impact == "High")
 
 CC_sp19 %>%
-  
+  ggplot() +
+  aes(x = Size) +
+  geom_histogram(aes(y = after_stat(density))) 
+  coord_flip()
 ```
 
 What observations can we make about the distribution of this data?
 
-- Is it symmetrical or skewed?
+- Is it symmetrical or skewed? skewed, slightly
 
-- Are there many outliers?
+- Are there many outliers? 1
 
-- Is there missing data?
+- Is there missing data? not really
 
-- Is it unimodal, i.e., is there only one peak where there are the most observations, or are there multiple peaks (bimodal, etc.)?
+- Is it unimodal, i.e., is there only one peak where there are the most observations, or are there multiple peaks (bimodal, etc.)? unimodal
 
 - What are our expectations for what size demographics should look like for populations of:
 
-  - long-lived vs. short-lived animals
+  - long-lived vs. short-lived animals - owl limpets are long lived
 
-  - r vs. K-selected
+  - r vs. K-selected -
 
   - growing vs. shrinking populations?
 
 - What factors apart from the population itself may have influenced this pattern? Let's look at the histograms for all the dates and sites:
 
 ```{r many histograms}
-CCdata_tidy %>%
-  ggplot() +
-  
-
+CCdata_tidy |> 
+  ggplot() + 
+  aes(x = Size) + 
+  geom_histogram() +
+  facet_wrap(Survey_Date ~ Impact)
 
 ```
 
 On the whole, how would you describe these distributions?
+
+- the distributions are skewed mostly to the right in the highly impacted sites/look normal
 
 #### The Normal Distribution
 
@@ -130,18 +139,23 @@ How do we assess?
 
 1.  Visually. Is it symmetrical? Are most of the observations in the middle?
 
-2.  With a QQ plot. Do the observations mostly fall close to the 1:1 line?
+- yes
 
-3.  With a Shapiro-Wilk test (we'll learn this later)
+1.  With a QQ plot. Do the observations mostly fall close to the 1:1 line?
+
+- 
+
+1.  With a Shapiro-Wilk test (we'll learn this later)
 
 Visual:
 
 ```{r}
-CC_sp19 <-  %>%
-  filter()
+CC_sp19 
 
 CC_sp19 %>%
   ggplot() +
+  aes(x = Size) +
+  geom_histogram + aes(y = after_stat())
   
 ```
 
@@ -149,7 +163,7 @@ CC_sp19 %>%
 
 ```{r}
 # here's one function from Base R
-qqnorm()
+qqnorm(CC_sp19$Size)
 
 # And another from the car package that has 95% confidence intervals
 car::qqPlot()

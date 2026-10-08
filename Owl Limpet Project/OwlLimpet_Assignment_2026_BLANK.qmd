@@ -108,18 +108,24 @@ ANSWER: Our methods have been a little inconsistent. We used different methods a
 Graph 1:
 
 ```{r}
-
+  ggplot(NewSizeData_2022_2025) +
+  aes(x = habitat) +
+  geom_bar() + 
+  facet_wrap(year~site)
 ```
 
-This shows:
+This shows: The count of owl limpets located in habitats; open, patched, and n/a per site; Corona Del Mar, Treasure Cove, Heisler Park, and Shaws Cove for 2022-2025.
 
 Graph 2:
 
 ```{r}
-
+  NewSizeData_2022_2025 |> 
+  ggplot() + 
+  aes(x = year) +
+  geom_bar() 
 ```
 
-This shows:
+This shows: The count of owl limpets from years 2022 through 2025 in all sites. The year 2024 has multiple sites recorded displaying a higher count in 2024 in this graph.
 
 ## Part 2: Population Density
 
@@ -127,6 +133,7 @@ For the population density analysis, we will analyze data from Shaws Cove, Heisl
 
 ```{r}
 No_CDM_Sizes <- SizeData_2022_2025 |> 
+  filter(site!= "Corona Del Mar")
 ```
 
 #### 2.1. How many limpets did we measure at each site in each year for sizes?
@@ -138,7 +145,7 @@ No_CDM_Sizes
 
 # How many did we measure total, across both sites?
 No_CDM_Sizes |> 
-
+nrow()
 ## How many did we measure at each site? 
 No_CDM_Sizes |> 
 

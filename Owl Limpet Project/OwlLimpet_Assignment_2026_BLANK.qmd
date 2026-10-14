@@ -164,7 +164,7 @@ Make a new dataframe out of the `No_CDM_Sizes` that has a column called *density
 No_CDM_Sizes |>
   group_by(site) |>
   count(transect_num) 
-
+transect 
 Limpet_Density <- No_CDM_Sizes |>
   group_by(transect_num)+
   summarise(density = n/(*2)) 

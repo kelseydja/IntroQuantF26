@@ -467,7 +467,7 @@ titanic |>
 
 ```
 
-#### `group_by()`
+#### `+group_by()`
 
 Notice how above it calculated one mean fare for the whole table. What if you want to know the mean fare by class? Or whether passengers survived or not? **`group_by()`** takes the specified variables and calculates separate summary values for the categories of that variable, which is hecking useful.
 

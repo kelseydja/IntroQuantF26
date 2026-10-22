@@ -9,6 +9,7 @@ editor: visual
 # Assessment of owl limpet (*Lottia gigantea*) populations at sites within Crystal Cove State Marine Conservation Area
 
 ```{r load packages, include = FALSE}
+#load all packages needed 
 library(tidyverse)
 library(readxl)
 library(ggplot2)
@@ -17,6 +18,10 @@ library(ggplot2)
 ## Project Summary:
 
 *Once you have completed this entire assignment, come back and write a project summary here that covers the aims, research questions, and basic methods of this study.*
+
+In this project, the assessment of owl limpet (*Lottia gigantea*) populations are recorded among sites of local state parks in Orange County. The owl limpet populations aim to determine if human visitation disturb the growth and if the sizes vary by year. In addition, as owl limpets can be territorial, this project records their territory size and determine if correlation occurs between its size and territory size. The methods of this study is to survey owl limpets by recording their sizes using a Vernier Caliper and habitats using observation. To record the territory of the owl limpets, a transect (0m-20m) will be placed with a mesh quadrat counting the number of squares to the nearest 0.5. To calculate the area of territory, the column of squares will be counted and multiplied with its counted width of the net.
+
+the sizes of own limpets,
 
 You have been given data from several locations and survey years:
 
@@ -29,8 +34,11 @@ You have been given data from several locations and survey years:
 -   2025: Treasure Cove (TC) - size data in 5-m transects, territories
 
 ```{r}
+#load the data file provided
 load(file = "Data/SizeData_2022_2025.Rdata")
+#take a look at the data file
 glimpse = SizeData_2022_2025
+#to see the data below enter the data itself
 SizeData_2022_2025
 ```
 
@@ -43,6 +51,7 @@ Start with: `SizeData_2022_2025`
 Make a histogram with all the data.
 
 ```{r}
+#plot a histogram using ggplot and include the x axis
 ggplot(SizeData_2022_2025) +
   aes(x = shell_length_mm) +
   geom_histogram ()
@@ -50,7 +59,10 @@ ggplot(SizeData_2022_2025) +
 
 Make a histogram with a `facet_wrap()` to separate the data from each site and year into separate graphs. What do you observe about the different histograms?
 
+I see the separation between all the year and sites from the main data set. Shaws Cove displays the most counts compared to other sites like CDM, Treasure Cove x2, and Heisler Park.
+
 ```{r}
+#make a histogram and separate the data set with different year & sites from the data set
 ggplot(SizeData_2022_2025) +
   aes(x = shell_length_mm) +
   geom_histogram () + 
@@ -60,6 +72,7 @@ ggplot(SizeData_2022_2025) +
 We know our minimum size cut-off varied in different years of the surveys, and some teams just didn't follow directions. Filter out any observations smaller than 15 mm.
 
 ```{r}
+#create a new data set without observatinos smaller than 15mm by filtering 
 NewSizeData_2022_2025 <- SizeData_2022_2025 |> 
   filter(shell_length_mm >= 15)
 ```
@@ -69,10 +82,12 @@ NewSizeData_2022_2025 <- SizeData_2022_2025 |>
 Make a table using `select()` and `distinct()` to only show the length of each transect (each unique number) at each site. Sort by site and transect number.
 
 ```{r}
+#to find the transect lengths, the data got filtered out to display only the length, year, site, and transect number
 TransectLengths <- SizeData_2022_2025 |> 
   select(transect_length_m, site, transect_num, year) |>  
   distinct() |> 
   arrange(transect_num) 
+#this displays the data set below
 TransectLengths  
 ```
 
@@ -85,14 +100,15 @@ Visualize the transect lengths two different ways.
 -   combine the two so that the points are red and overlay the boxplot graph.
 
 ```{r}
+#create a box and whisker showing max, upper quart, median, and lower quart 
 TransectLengths |> ggplot() +
   aes(x = site, y = transect_length_m) +
   geom_boxplot() 
-
+#create a scatterplot
 TransectLengths |> ggplot() +
   aes(x = site, y = transect_length_m) +
   geom_point() 
-
+#create a boxplot outlining the max, upper quart, median, and lower quart in red 
 TransectLengths |> ggplot() +
   aes(x = site, y = transect_length_m) +
   geom_boxplot() +
@@ -108,6 +124,7 @@ ANSWER: Our methods have been a little inconsistent. We used different methods a
 Graph 1:
 
 ```{r}
+#created a histogram habitat and count, separated the site and year 
 ggplot(NewSizeData_2022_2025) +
   aes(x = habitat) +
   geom_bar() + 
@@ -119,6 +136,7 @@ This shows: The count of owl limpets located in habitats; open, patched, and n/a
 Graph 2:
 
 ```{r}
+#displayed a histogram with year and count of limpets 
 NewSizeData_2022_2025 |> 
   ggplot() + 
   aes(x = year) +
@@ -132,6 +150,7 @@ This shows: The count of owl limpets from years 2022 through 2025 in all sites. 
 For the population density analysis, we will analyze data from Shaws Cove, Heisler Park, and Treasure Cove. Create a data frame that excludes the Corona del Mar data, as that site did not have area measured.
 
 ```{r}
+#loaded the data set and filtered out any "CDM" sites
 No_CDM_Sizes <- SizeData_2022_2025 |> 
   filter(site != "Corona del Mar")
 ```
@@ -141,16 +160,20 @@ No_CDM_Sizes <- SizeData_2022_2025 |>
 Use nrow(), group_by() and count() to tally the limpet observations at each transect. We used the same transect numbers at Shaws and Heisler, so group_by() site as well.
 
 ```{r}
+#loaded the data to see below
 No_CDM_Sizes
 
 # How many did we measure total, across both sites?
+#calculated the total of Shaws Cove and Heisler Park sites
 No_CDM_Sizes |> 
 nrow()
 ## How many did we measure at each site? 
+#grouped the site and counted the number of rows 
 No_CDM_Sizes |> 
   group_by(site) |> 
   summarise(count=n())
 # How many did we measure in each transect? 
+#count how many transect numbers were present in the data
 No_CDM_Sizes |>
   group_by(site) |>
   count(transect_num)
@@ -161,28 +184,35 @@ No_CDM_Sizes |>
 Make a new dataframe out of the `No_CDM_Sizes` that has a column called *density,* that calculates the limpets per square meter for each transect. Remember that the transect included 1 meter on either side of the tape (total of 2 meters wide). Make sure to maintain the separation in year for the two Treasure Cove surveys using the `group_by()` function.
 
 ```{r}
+#selected and combined the variables needed to calculate density then made a new column for density
 Limpet_Density <- No_CDM_Sizes |>
   select(transect_length_m, site, transect_num, year) |>
   group_by(transect_length_m, site, transect_num, year) |> 
   summarize(count = n()) |>
   mutate(density = count/(transect_length_m*2))
-
+#displayed the count and density in each site, transect length, and year
 print(Limpet_Density)
 ```
 
 Do you see any patterns just from examining this table of values?
+
+Treasure Cove displays a decrease in trend when it comes to organism count and density in the year 2023 and 2025.
 
 #### 2.2. Calculating mean and standard error of population density
 
 What was the mean limpets per square meter across all sites? And the standard deviation? And standard error?
 
 ```{r}
+#calculated the mean of the densities
 Limpet_Density$density |> 
   mean()
+#calculated the standard deviation of the densities
 Limpet_Density$density |> 
   sd()
+#calculated the sample size of the densities
 n <- Limpet_Density$density |> 
   length()
+#calculated the standard error of the densities
 Limpet_Density$density |> 
   sd()/sqrt(n)
 ```
@@ -191,6 +221,7 @@ Now create a summary table in which you calculate separate mean and standard dev
 
 ```{r}
 # use summarize() to calculate the mean and standard error (sd/sqrt(n)) for the two locations
+#calculated the summary statistics for the density then grouped it by year and site then rounded to 2 decimal points
 LimpetPopSummary <- Limpet_Density |>
   group_by(site, year) %>% 
   summarise(mean_density = mean(density, na.rm = TRUE),
@@ -200,7 +231,7 @@ LimpetPopSummary <- Limpet_Density |>
   mutate_at(vars(mean_density, sd_density, se_density), # bonus line to reduce digits
             .funs = round, 2) 
 
-# Display your summary nicely using kable(). 
+# Display your summary nicely using kable(). #created a organized table of all the variables calculated
 knitr::kable(LimpetPopSummary)
 ```
 
@@ -209,12 +240,13 @@ knitr::kable(LimpetPopSummary)
 Boxplot, using the `Limpet_density` object, using fill for year. Label the Y-axis to say "Limpets per square meter".
 
 ```{r}
+#created a box plot
 Limpet_Density |> ggplot() + 
    aes(x = site, y = density, fill = year) +
   geom_boxplot() +
-
+#added labels for x axis, y axis, and title
 labs(y = "Limpets per square meter",
-          x = "Site and Density",
+          x = "Site",
        title = "Limpet Density per Site")
 
 ```
@@ -222,6 +254,7 @@ labs(y = "Limpets per square meter",
 A column plot with errorbars, and fill = year, using your new `LimpetPopSummary` object. Make sure to label the y-axis appropriately.
 
 ```{r}
+#created a box plot with error bars variability of the data points, filled each site per year, then labeled the axis
 LimpetPopSummary |> ggplot() +
   aes(x = site, y = mean_density, fill = year) +
   geom_col(position = position_dodge()) +
@@ -231,13 +264,14 @@ LimpetPopSummary |> ggplot() +
   width = 0.2
 ) +
 labs(y = "Limpets per square meter",
-       x = "Site and Density",
+       x = "Site",
        title = "Limpet Density per Site")
 ```
 
 A `geom_point()` or `geom_jitter()`plot to visualize individual transect density observations
 
 ```{r}
+#created a scatter plot to see the individual observations
 Limpet_Density |> ggplot() + 
   aes(x = transect_num, y = density) +
   geom_point()
@@ -245,23 +279,38 @@ Limpet_Density |> ggplot() +
 
 Which plot do you find the most informative and useful and why?
 
+The plot that was the most informative was the box plot with error bars because it displays the median, overall range, and outliers of the data from each site and year. The plot was also organized per year and site with different colors giving an easier visualization to see which site had a higher density and variability.
+
 Based on these plots, does your data meet assumptions for a t-test?
+
+The data does not meet the assumptions for a t-test.
 
 T-Test assumptions (for a Student's T-test)
 
 -   Are the data continuous (i.e., not categorical/discrete)?
 
+    Numerical
+
 -   Have the sample data been randomly sampled from a population?
+
+    Yes
 
 -   Is there homogeneity of variance (i.e., the variability of the data in each group is similar)?
 
+    No because the box plot display different levels of variability among all sites and the years.
+
 -   Is the distribution of the model residuals approximately normal?
+
+    The data is skewed to the right due to some sites having higher limpet densities than the other.
 
 #### 2.5 What is the sample size (of transects) for each site/year for our study of limpet population density?
 
 Is it roughly the same so that we can compare? Is it enough to run a statistical test?
 
+Yes because the sample sizes are similar with the previous data set. This is not enough to run a statistical test because the year and the 3 sites are not consistent with each other.
+
 ```{r}
+#group the data by site and year, count the transect per group, and removes the grouping after summarizing
 Limpet_Density |> 
   group_by(site, year) |> 
   summarize(sample_size = n_distinct(transect_num),
@@ -274,9 +323,10 @@ Filter the data to only include those sites before putting it into the `t.test()
 
 ```{r t-test}
 # run a t-test on your count data from each site (Limpet_Density)
+#created a new data set with its filtered sites and created a new data set name
 ShawsHeislerDensity <- Limpet_Density |> 
   filter(site == "Heisler Park" | site == "Shaws Cove")
-
+#ran a two sample t test for Heisler Park and Shaws Cove 
 t.test(density~site, data = ShawsHeislerDensity)
 
 ```
@@ -286,11 +336,12 @@ Explain the results of this t-test. Are you surprised by this result, given the 
 #### 2.7 Did Treasure Cove population density differ between the two sample years? Do a t-test and make a graph to complement presenting the result.
 
 ```{r}
+#make a new data set with just Treasure Cove
 TC_density <- Limpet_Density |>
   filter(site == "Treasure Cove")
-
+#run a t test for the relationship for density in year 2023 and 2025
 t.test(density~year, data = TC_density)
-
+#make a scatterplot with labels for both years of limpet density in Treasure Cove 
 TC_density |> 
   ggplot() +
   aes(x = year, y = density) +
@@ -306,6 +357,20 @@ Since there was no difference in means, we'll ignore year at Treasure Cove from 
 
 ```{r}
 
+
+anova_density_data <- Limpet_Density |>
+  filter(year == "2025")
+
+show(anova_density_data)
+
+ggplot(anova_density_data) + 
+  aes(x = site, y = density) + 
+  geom_boxplot()
+
+anova_density_model <- lm(
+  ~density,
+  data = anova_density_data
+)
 
 ```
 
@@ -554,12 +619,17 @@ One way to transform data that has this shape is to apply a log-transformation. 
 # plot a scatterplot log area on y axis by log mass_g on x axis, best fit regression line but no SE interval
 
 All_Territories_area_mass |> ggplot() + 
-
+  aes(log(body_mass),territory_area_mm) +
+  geom_point() +
+  
+All_Territories_area_mass +
+  geom_smooth(method = "lm", se = FALSE)
 ```
 
 ```{r}
 # write the linear model object and examine the residual and QQ plots
-log_model <- lm(     )
+log_model <- lm(body_mass ~ 
+                  territory_area_mm, data = All_Territories_area_mass)
   
 plot(log_model, which = 1)
 plot(log_model, which = 2)
@@ -569,7 +639,7 @@ plot(log_model, which = 2)
 
 ```{r linear regression test summary}
 
-
+summary(log_model)
 
 ```
 

@@ -228,19 +228,19 @@ x == 5
 
 ##### Key to Logical Operators:
 
-- **`>`**, **`<`** : greater than, less than
+-   **`>`**, **`<`** : greater than, less than
 
-- **`=>`**, **`=<`**, : greater than or equal to, less than or equal to
+-   **`=>`**, **`=<`**, : greater than or equal to, less than or equal to
 
-- **`!=`** : NOT equal to
+-   **`!=`** : NOT equal to
 
-- **`==`** : exactly equal to
+-   **`==`** : exactly equal to
 
-- **`%in%`** : value appears within the array
+-   **`%in%`** : value appears within the array
 
-- **`&`** : AND
+-   **`&`** : AND
 
-- **`|`** : OR
+-   **`|`** : OR
 
 The `filter()` function turns this logical statement into a **conditional statement** (e.g., only the observations from site 1, or only values greater than 10), we pass the R function a statement (usually including a logical operator) which it then applies to each row of the data frame and determines if it is `TRUE` or `FALSE` for that row. In a conditional statement, we tell R, "If statement is `TRUE`, then do THIS".
 

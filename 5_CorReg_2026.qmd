@@ -73,9 +73,7 @@ The assumptions of correlation are:
 
 ##### Are one or both of your variables **normal**? (this is a very small sample size, so we will assume its good enough, but normally you could check with a histogram)
 
-```{hist(mayfly$Abund)}
-hist(mayfly$Speed)
-```
+`{hist(mayfly$Abund)} hist(mayfly$Speed)`
 
 3.  **Homoscedasticity** - is there roughly equal variance across the range of data?
 

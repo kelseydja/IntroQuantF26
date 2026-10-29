@@ -14,14 +14,14 @@ Today we will play with a few datasets that fit these criteria.
 
 ### Steps for Correlation and Regression
 
-- Step 1: Look at your data. Is it tidy?
-- Step 2: Visualize the data
-- Step 3: Check your assumptions
-- Step 4: Apply transformations, if necessary
-- Step 5: Determine which test to use
-- Step 6: Write out your hypotheses
-- Step 7: Conduct the test
-- Step 8: Communicate results with a plot and writing.
+-   Step 1: Look at your data. Is it tidy?
+-   Step 2: Visualize the data
+-   Step 3: Check your assumptions
+-   Step 4: Apply transformations, if necessary
+-   Step 5: Determine which test to use
+-   Step 6: Write out your hypotheses
+-   Step 7: Conduct the test
+-   Step 8: Communicate results with a plot and writing.
 
 ### Load Data
 
@@ -33,6 +33,8 @@ load(file = "Demo Data Files/S4E2e.RData")
 
 ```{r}
 library(tidyverse)
+library(readxl)
+library(ggplot2)
 ```
 
 ## Correlation
@@ -71,10 +73,7 @@ The assumptions of correlation are:
 
 ##### Are one or both of your variables **normal**? (this is a very small sample size, so we will assume its good enough, but normally you could check with a histogram)
 
-```{r}
-hist(mayfly$Abund)
-hist(mayfly$Speed)
-```
+`{hist(mayfly$Abund)} hist(mayfly$Speed)`
 
 3.  **Homoscedasticity** - is there roughly equal variance across the range of data?
 
@@ -117,11 +116,11 @@ If your data failed any of the assumptions, you have recourse! We will learn how
 
 #### Step 5: determine which test to use and which is the predictor/response
 
-- If NOT NORMAL (skewed) (and transformations fail), then the test to use is the the *Spearman's Rank test* (non-parametric).
+-   If NOT NORMAL (skewed) (and transformations fail), then the test to use is the the *Spearman's Rank test* (non-parametric).
 
-- If it IS NORMAL, then you can calculate a *Pearson's product moment*, or the correlation coefficient associated with a simple regression.
+-   If it IS NORMAL, then you can calculate a *Pearson's product moment*, or the correlation coefficient associated with a simple regression.
 
-- If your data is *ordinal* (i.e., categorical but in a strict order, like \[small medium large\]), then you can either do a Spearman or calculate the *Kendall's tau coefficient* (more specific to ordinal data)
+-   If your data is *ordinal* (i.e., categorical but in a strict order, like \[small medium large\]), then you can either do a Spearman or calculate the *Kendall's tau coefficient* (more specific to ordinal data)
 
 **Ask**: Which of these variables makes more sense as the predictor variable? Which is more sensible as the response variable?
 
@@ -131,17 +130,17 @@ Remember, *correlation does not mean causation!*
 
 For a Spearman's rank correlation:
 
-- H0: There is no correlation between stream speed and mayfly abundance. (rho = 0)
+-   H0: There is no correlation between stream speed and mayfly abundance. (rho = 0)
 
-- HA: There is a positive correlation between stream speed and mayfly abundance. (rho \> 0) or,
+-   HA: There is a positive correlation between stream speed and mayfly abundance. (rho \> 0) or,
 
-- HA: There is a negative correlation between stream speed and mayfly abundance (rho \< 0)
+-   HA: There is a negative correlation between stream speed and mayfly abundance (rho \< 0)
 
 for a Pearson's product moment test or simple linear regression:
 
-- H0: There is not a linear relationship between stream speed and mayfly abundance (slope = 0)
+-   H0: There is not a linear relationship between stream speed and mayfly abundance (slope = 0)
 
-- HA: There is a linear relationship between stream speed and mayfly abundance (slope != 0) or, greater than, or less than, etc.
+-   HA: There is a linear relationship between stream speed and mayfly abundance (slope != 0) or, greater than, or less than, etc.
 
 #### Step 7: Conduct the test
 
@@ -290,14 +289,14 @@ Example: Water flow speed linearly predicted abundance of mayflies, explaining 7
 
 ## Great! What about less simple, non-linear regression? there are relationships that aren't linear.
 
-- Step 1: Look at your data. Is it tidy?
-- Step 2: Visualize the data
-- Step 3: Check your assumptions
-- Step 4: Apply transformations, if necessary
-- Step 5: Determine which test to use
-- Step 6: Write out your hypotheses
-- Step 7: Conduct the test
-- Step 8: Communicate results with a plot and writing.
+-   Step 1: Look at your data. Is it tidy?
+-   Step 2: Visualize the data
+-   Step 3: Check your assumptions
+-   Step 4: Apply transformations, if necessary
+-   Step 5: Determine which test to use
+-   Step 6: Write out your hypotheses
+-   Step 7: Conduct the test
+-   Step 8: Communicate results with a plot and writing.
 
 #### Step 1: Look at your data. Is it tidy?
 

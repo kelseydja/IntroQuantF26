@@ -1,6 +1,5 @@
+# \<\<\<\<\<\<\< HEAD
 
-<<<<<<< HEAD
-=======
 # Assessment of owl limpet (*Lottia gigantea*) populations at sites within Crystal Cove State Marine Conservation Area
 
 ```{r load packages, include = FALSE}
@@ -20,13 +19,13 @@ the sizes of own limpets,
 
 You have been given data from several locations and survey years:
 
--   2022: Corona del Mar (CDM) - size data only, taken haphazardly
+- 2022: Corona del Mar (CDM) - size data only, taken haphazardly
 
--   2023: Treasure Cove (TC) - size data in 5-m transects, territories
+- 2023: Treasure Cove (TC) - size data in 5-m transects, territories
 
--   2024: Heisler Park and Shaws Cove - size data in variable length transects, territories
+- 2024: Heisler Park and Shaws Cove - size data in variable length transects, territories
 
--   2025: Treasure Cove (TC) - size data in 5-m transects, territories
+- 2025: Treasure Cove (TC) - size data in 5-m transects, territories
 
 ```{r}
 #load the data file provided
@@ -88,11 +87,11 @@ TransectLengths
 
 Visualize the transect lengths two different ways.
 
--   Make one boxplot with transect length on the y-axis, and site on the x-axis.
+- Make one boxplot with transect length on the y-axis, and site on the x-axis.
 
--   Use `geom_point()` to make a scatter plot with the same axes.
+- Use `geom_point()` to make a scatter plot with the same axes.
 
--   combine the two so that the points are red and overlay the boxplot graph.
+- combine the two so that the points are red and overlay the boxplot graph.
 
 ```{r}
 #create a box and whisker showing max, upper quart, median, and lower quart 
@@ -282,21 +281,21 @@ The data does not meet the assumptions for a t-test.
 
 T-Test assumptions (for a Student's T-test)
 
--   Are the data continuous (i.e., not categorical/discrete)?
+- Are the data continuous (i.e., not categorical/discrete)?
 
-    Numerical
+  Numerical
 
--   Have the sample data been randomly sampled from a population?
+- Have the sample data been randomly sampled from a population?
 
-    Yes
+  Yes
 
--   Is there homogeneity of variance (i.e., the variability of the data in each group is similar)?
+- Is there homogeneity of variance (i.e., the variability of the data in each group is similar)?
 
-    No because the box plot display different levels of variability among all sites and the years.
+  No because the box plot display different levels of variability among all sites and the years.
 
--   Is the distribution of the model residuals approximately normal?
+- Is the distribution of the model residuals approximately normal?
 
-    The data is skewed to the right due to some sites having higher limpet densities than the other.
+  The data is skewed to the right due to some sites having higher limpet densities than the other.
 
 #### 2.5 What is the sample size (of transects) for each site/year for our study of limpet population density?
 
@@ -408,11 +407,11 @@ We have a much larger sample size for shell lengths than we did for density, so 
 
 T-Test assumptions (for a Student's T-test)
 
--   Are the data continuous (i.e., not categorical/discrete)? **YES**
+- Are the data continuous (i.e., not categorical/discrete)? **YES**
 
--   Have the sample data been randomly sampled from a population? **(Yes)**
+- Have the sample data been randomly sampled from a population? **(Yes)**
 
--   Is there homogeneity of variance (i.e., the variability of the data in each group is similar)? **NO**
+- Is there homogeneity of variance (i.e., the variability of the data in each group is similar)? **NO**
 
 ```{r}
 ## Test for Homogeneity of Variance with an F-Test
@@ -434,9 +433,9 @@ var.test(shell_length_mm ~ site, data = CDM_TC_Sizes)
 
 ```
 
--   Is the distribution of the model residuals approximately normal?
+- Is the distribution of the model residuals approximately normal?
 
-    No because the distribution displays unequal data clumps on both ends. If the data was normal, the data would be distributed equally among the line of fit.
+  No because the distribution displays unequal data clumps on both ends. If the data was normal, the data would be distributed equally among the line of fit.
 
 ```{r}
 ## Test for normality
@@ -527,9 +526,9 @@ All_Territories |>
 
 Create new columns for:
 
--   territory area in square millimeters from the "`numbsquares`" column
+- territory area in square millimeters from the "`numbsquares`" column
 
--   Limpet body mass from shell length (equation below is from Fenberg et al. 2013).
+- Limpet body mass from shell length (equation below is from Fenberg et al. 2013).
 
 ```{r}
 All_Territories_area_mass <- All_Territories |> 
@@ -668,4 +667,5 @@ Explain your findings!
 #### 5.1 Calculate the slope of best fit regression separately for each site.
 
 #### 5.2 Explore some aspect of the data you find interesting and ask a unique question.
->>>>>>> 495a7ad930661a1d7ea9756bbb0f7ddb3b64f6bd
+
+> > > > > > > 495a7ad930661a1d7ea9756bbb0f7ddb3b64f6bd

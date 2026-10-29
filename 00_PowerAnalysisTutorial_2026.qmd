@@ -33,9 +33,9 @@ ggplot(All_Size_Data) +
 
 For any given statistical test, there are some default hypotheses.
 
-- $H_0$: The **null hypothesis** is usually that [there is no relationship]{.underline} between the variables, or no difference in means between treatments/samples.
+-   $H_0$: The **null hypothesis** is usually that [there is no relationship]{.underline} between the variables, or no difference in means between treatments/samples.
 
-- $H_A$: The **alternative hypothesis** is that [there is a relationship]{.underline} between the tested variables, or a difference in means between treatments/samples.
+-   $H_A$: The **alternative hypothesis** is that [there is a relationship]{.underline} between the tested variables, or a difference in means between treatments/samples.
 
 In our owl limpet study, the null is that there is no difference in mean owl limpet shell length between CDM and TC, and the alternative is that there is a significant difference in means. Significant in this case does not just mean "large" or "notable"; **statistical significance** is defined as a determination made by an analyst that **the results in the data are not explainable by chance** alone.
 
@@ -61,14 +61,14 @@ The bold column headers represent the true, unknowable relationship; on the rows
 
 ## 3. Components of a Power Analysis
 
-- Effect size (Cohen's d, or ES) - difference between the means divided by the pooled standard deviation
-  - How big is the difference?
-- Sample Size (n)
-  - How many did you have to count?
-- Significance level (Type I error probability, or α)
-  - What are the odds that if you decided there is a difference, that you're wrong?
-- Power of test (1 - β, alternately written as 1 - Type II error probability)
-  - What are the odds that if you decide that there is no difference, that you're right?
+-   Effect size (Cohen's d, or ES) - difference between the means divided by the pooled standard deviation
+    -   How big is the difference?
+-   Sample Size (n)
+    -   How many did you have to count?
+-   Significance level (Type I error probability, or α)
+    -   What are the odds that if you decided there is a difference, that you're wrong?
+-   Power of test (1 - β, alternately written as 1 - Type II error probability)
+    -   What are the odds that if you decide that there is no difference, that you're right?
 
 The formulas differ a little depending on the statistical test you're running and are not especially pretty, but you can use functions in R to calculate any of these metrics as long as you have the other three.
 
@@ -114,13 +114,13 @@ How do you determine an appropriate effect size? A good rule of thumb if you hav
 
 Consider the two scenarios:
 
-- You are testing a new herbicide to control invasive plants, and find that it kills 5% more invasive plants than the old herbicide (p \<0.05).
+-   You are testing a new herbicide to control invasive plants, and find that it kills 5% more invasive plants than the old herbicide (p \<0.05).
 
-  - How much more effective would the herbicide need to be for it to be worth it to switch brands?
+    -   How much more effective would the herbicide need to be for it to be worth it to switch brands?
 
-- You need to know if the new herbicide is safe for the native plants you are trying to conserve, and find that it kills 5% more of the endangered native plants than the one that you were using before (p \< 0.05).
+-   You need to know if the new herbicide is safe for the native plants you are trying to conserve, and find that it kills 5% more of the endangered native plants than the one that you were using before (p \< 0.05).
 
-  - How much more lethal does it need to be before you get concerned?
+    -   How much more lethal does it need to be before you get concerned?
 
 In the first scenario, a small effect size was hardly worth mentioning, but in the other, you take notice because the stakes are higher. Notice how the statistical significance (the p-value) had nothing to do with how [practically important]{.underline} the results were.
 
@@ -262,15 +262,15 @@ How do we decide what acceptable power is for an experiment? A power of 0.8 is a
 
 In what kind of test might higher power be really important? Consider the following scenarios:
 
-- Scientists develop a test for a new and scary viral infection that is nearly always deadly if untreated, but is very treatable with an inexpensive medication if caught early. You are exposed to this virus and your test is negative; however, the doctor tells you that 20% of the time an infected person takes this test, it has a false negative. How confident are you about going home without the medication?
+-   Scientists develop a test for a new and scary viral infection that is nearly always deadly if untreated, but is very treatable with an inexpensive medication if caught early. You are exposed to this virus and your test is negative; however, the doctor tells you that 20% of the time an infected person takes this test, it has a false negative. How confident are you about going home without the medication?
 
-  - Fun Fact! OTC COVID-19 rapid antigen tests have a sensitivity of about 0.65 in symptomatic individuals and about 0.44 in asymptomatic individuals (Jegerlehner et al. 2021, *Int.J.Inf.Dis.*). This is why most OTC test kits recommend taking two tests within 24 hours; the probability of getting a false negative twice in a row is much lower!
+    -   Fun Fact! OTC COVID-19 rapid antigen tests have a sensitivity of about 0.65 in symptomatic individuals and about 0.44 in asymptomatic individuals (Jegerlehner et al. 2021, *Int.J.Inf.Dis.*). This is why most OTC test kits recommend taking two tests within 24 hours; the probability of getting a false negative twice in a row is much lower!
 
 ```{r}
 (1 - 0.65)^2
 ```
 
-- You are an EPA scientist tasked with determining whether a new fertilizer should be approved for use in agriculture near rivers; anecdotal evidence suggests that it may have detrimental impacts on river invertebrate communities. You are given unreplicated data from 8 rivers; four where the fertilizer is used, four where it is not. Assuming that a moderate effect size (0.5) would be important and α = 0.05, how confident would you be approving or rejecting the fertilizer for use based on the river data?
+-   You are an EPA scientist tasked with determining whether a new fertilizer should be approved for use in agriculture near rivers; anecdotal evidence suggests that it may have detrimental impacts on river invertebrate communities. You are given unreplicated data from 8 rivers; four where the fertilizer is used, four where it is not. Assuming that a moderate effect size (0.5) would be important and α = 0.05, how confident would you be approving or rejecting the fertilizer for use based on the river data?
 
 ```{r}
 Power_Fert <- pwr.t.test(
@@ -367,9 +367,9 @@ Remember our subsampling exercise before - some proportion of the time, the rand
 
 It is important to note that significance is a threshold; above a certain value, you fail to reject the null, but below it, you do reject the null.
 
-- Increasing significance (i.e., raising from 0.05 to 0.1) means accepting a higher likelihood that you will have a false positive, which weakens the conclusions that you can make from your experiment.
+-   Increasing significance (i.e., raising from 0.05 to 0.1) means accepting a higher likelihood that you will have a false positive, which weakens the conclusions that you can make from your experiment.
 
-- Lowering significance (i.e., lowering from 0.05 to 0.01) means your test is more conservative and very unlikely to have a false positive, but you may miss some true effects, depending on your sample size and other factors.
+-   Lowering significance (i.e., lowering from 0.05 to 0.01) means your test is more conservative and very unlikely to have a false positive, but you may miss some true effects, depending on your sample size and other factors.
 
 #### Trade-off with power
 
@@ -401,11 +401,11 @@ ggplot(test) +
 
 Where do you get the most "bang" (power) for your "buck" (low significance) when the sample size is small?
 
-- the steepest part of the curve for sample sizes under 50 or so is usually between 0.01 and 0.05 - gains in power reduce after that.
+-   the steepest part of the curve for sample sizes under 50 or so is usually between 0.01 and 0.05 - gains in power reduce after that.
 
 Where do you get the most "bang" (power) for your "buck" (low significance) when the sample size is large?
 
-- With a large sample size, the gains in power don't level off until after \~ 0.01. A lower significance level may be appropriate for larger sample sizes to maximize power.
+-   With a large sample size, the gains in power don't level off until after \~ 0.01. A lower significance level may be appropriate for larger sample sizes to maximize power.
 
 What was the minimum sample size needed to detect the difference between TC near vs far?
 

@@ -61,11 +61,11 @@ This dataset is already in tidy format. Lucky us!
 
 ### Step 2: Assess what kind of variables we're dealing with.
 
-- height: quantitative
+-   height: quantitative
 
-- plant: categorical
+-   plant: categorical
 
-- water: categorical
+-   water: categorical
 
 Predictors: plant, water
 
@@ -135,11 +135,11 @@ summary(model_pw_aov)
 
 At first pass, it looks like:
 
-- Plant species by itself didn't make a difference (p = 0.14264)
+-   Plant species by itself didn't make a difference (p = 0.14264)
 
-- Water treatment did make a big difference (p \<\<\< 0.0001)
+-   Water treatment did make a big difference (p \<\<\< 0.0001)
 
-- Our interaction (`plant:water`, p = 0.00178) indicates that the two plant species may have reacted differently to the water treatments.
+-   Our interaction (`plant:water`, p = 0.00178) indicates that the two plant species may have reacted differently to the water treatments.
 
 ### Step 6: Assess the output. Does it make sense?
 
@@ -147,19 +147,19 @@ An easy first pass to examine if you've set up your model correctly is to check 
 
 #### Treatment degrees of freedom :
 
-- k - 1 plant has two species, so `2 - 1 = 1`
+-   k - 1 plant has two species, so `2 - 1 = 1`
 
-- water has three levels, so `3 - 1 = 2`
+-   water has three levels, so `3 - 1 = 2`
 
 #### Interaction degrees of freedom:
 
-- `(rows - 1) * (columns - 1)`
+-   `(rows - 1) * (columns - 1)`
 
 Here, rows are the species treatment (2 - 1 = 1) and columns are the water treatment (3 - 1 = 2) so our df here should be 1 \* 2 = 2 (good)
 
 #### Residuals (error term) degrees of freedom:
 
-- `total obs - (nrow * ncol)`
+-   `total obs - (nrow * ncol)`
 
 ```{r}
 
@@ -177,11 +177,11 @@ model_pw_aov
 
 If your degrees of freedom don't add up, you can try the following troubleshooting steps:
 
-- Check that the data frame you are using for the input to your model is the correct one.
+-   Check that the data frame you are using for the input to your model is the correct one.
 
-- Is your data frame tidy?
+-   Is your data frame tidy?
 
-- Have you correctly entered your predictors and responses into the model?
+-   Have you correctly entered your predictors and responses into the model?
 
 ### Step 7: Post-Hoc Test
 
@@ -251,20 +251,20 @@ TukeyHSD(model_pw)
 
 You saw up above this was a lot to pick apart, and we don't need to put a \* or bracket over every pairwise comparison. A shortcut approach is to order the treatment combinations by means from largest to smallest. Based on the height of bars in the plot, this is:
 
-- hi-sativa (40ish)
-- hi-vulgaris (30 ish)
-- mid-vulgaris (16 ish)
-- mid-sativa (15 ish)
-- lo-vulgaris (9 ish)
-- lo-sativa (6 ish)
+-   hi-sativa (40ish)
+-   hi-vulgaris (30 ish)
+-   mid-vulgaris (16 ish)
+-   mid-sativa (15 ish)
+-   lo-vulgaris (9 ish)
+-   lo-sativa (6 ish)
 
 Now check the pair of the two highest, then the second with the third highest, and so on and so forth.
 
-- hi-sativa x hi-vulgaris = different
-- hi-vulgaris x mid-vulgaris = different
-- mid-vulgaris x mid-sativa = not different
-- mid-sativa x lo-vulgaris = different (p = 0.46)
-- lo-vulgaris x lo-sativa = not different
+-   hi-sativa x hi-vulgaris = different
+-   hi-vulgaris x mid-vulgaris = different
+-   mid-vulgaris x mid-sativa = not different
+-   mid-sativa x lo-vulgaris = different (p = 0.46)
+-   lo-vulgaris x lo-sativa = not different
 
 Then you get the logic puzzle of figuring out the letters. Start left to right.
 

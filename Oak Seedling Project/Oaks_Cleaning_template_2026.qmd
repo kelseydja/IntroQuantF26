@@ -108,26 +108,26 @@ In this section we will look at and clean up each of the data sets you identifie
 
 1.  Dimensions
     1.  Does the data have the right number of rows? Are there blank rows of NAs at the bottom that need to be removed?
-        - `nrow()`, `dim()`, `glimpse()` to view counts of rows
+        -   `nrow()`, `dim()`, `glimpse()` to view counts of rows
     2.  Do you have all the columns you need? Do you need to bring in additional information for context?
-        - `ncol()`, `str()`, `names()`, `glimpse()` to view column numbers and names
-        - `full_join()`, `inner_join()`, `left_join()` etc. to merge with other data based on matching columns
-        - Are there columns you won't use that you'd like to exclude for simplicity using `select()`
+        -   `ncol()`, `str()`, `names()`, `glimpse()` to view column numbers and names
+        -   `full_join()`, `inner_join()`, `left_join()` etc. to merge with other data based on matching columns
+        -   Are there columns you won't use that you'd like to exclude for simplicity using `select()`
 2.  Column names
     1.  Are your column names tidy (i.e., have no punctuation or spaces, consistent capitals)?
-        - `rename()` to fix column names
-        - Recommendation: rename some of those messy LICOR columns to more useful and memorable ones!
+        -   `rename()` to fix column names
+        -   Recommendation: rename some of those messy LICOR columns to more useful and memorable ones!
 3.  Data types
     1.  Are your columns in the correct format?
-        - `typeof(data$variable)` or `glimpse()` to check column data type
-        - `mutate(variable = as.numeric())` to convert to numeric
-        - `mutate(variable = as.character())` to convert to string/word
-        - `mutate(variable = factor())` to convert to factor
+        -   `typeof(data$variable)` or `glimpse()` to check column data type
+        -   `mutate(variable = as.numeric())` to convert to numeric
+        -   `mutate(variable = as.character())` to convert to string/word
+        -   `mutate(variable = factor())` to convert to factor
     2.  Do the values in your columns all match the format you want? (e.g., are there characters in a numeric column?
-        - `unique(data$variable)` to see all unique values in that column
-        - `mutate(variable = case_when([see Data Wrangling demo]))` to repair
+        -   `unique(data$variable)` to see all unique values in that column
+        -   `mutate(variable = case_when([see Data Wrangling demo]))` to repair
     3.  Are there any cells that contain two kinds of information and may need to be separated? (e.g. Tag_Num that also includes sapling A/B or A1, A2, or A3)
-        - `separate()` to create two new columns by splitting the data based on a delimiter
+        -   `separate()` to create two new columns by splitting the data based on a delimiter
 4.  Irregular Values
     1.  Do all the values make sense for your data set (e.g., outliers)
         1.  `summary(df$variable)` gives the min & max and other values to see IF there is a weird value
@@ -140,8 +140,41 @@ In this section we will look at and clean up each of the data sets you identifie
 You may be either examining `SPAD_Data_Raw`, `Height_Data_Raw`, `LICOR_Data_Raw`, or `Moist_Data_Raw` for your ANOVA question. Examine your data set using the diagnostic functions I've given you above in the How to Examine and Clean Data section.
 
 ```{r}
-news <- SPAD_Data_Raw |> 
-  select("")
+#create new dataset to filter the NA's and to run the ANOVA test
+news <- Height_Data_Raw |> 
+  filter(Treatment == "AC" | Treatment == "DT" | Treatment == "NR" | Treatment == "OA" | Treatment == "OS" | Treatment == "SA") %>% 
+  select("Treatment", "Seedling_Ht_cm")
+#display the data that is going to be used for the ANOVA test
+show(news)
+#create a linear model from the dataset and the variables you want to test
+model1 <- lm(Seedling_Ht_cm ~ Treatment, data = news)
+#plot the anova density data to see the relationship between treatment and seed height
+ggplot(news) + 
+  aes(x = Treatment, y = Seedling_Ht_cm) + 
+  geom_boxplot()
+#create a QQ plot to see the standardized residuals from a fitted regression model 
+plot(model1, which = 2)
+#create a Shapiro-Wilk test on the residuals 
+shapiro.test(model1$residuals)
+#create a Bartlett test for density and site to see the homogeneity of variances 
+bartlett.test(Seedling_Ht_cm~Treatment, data=news)
+#create an ANOVA of the statistical model to test significance
+anova(model1)
+#find which site is significantly different from each other after running the ANOVA test
+TukeyHSD(aov(Seedling_Ht_cm~Treatment, data = news))
+#create the mean and standard error from the seed height to plot
+news_summary <- news |> 
+  group_by(Treatment) |>
+  summarise(mean = mean(Seedling_Ht_cm), 
+            se = sd(Seedling_Ht_cm)/sqrt(n()) )
+#plot your results with error bars and labels
+ggplot(news_summary) + 
+  aes(x = Treatment, y = mean) + 
+  geom_col() + 
+  geom_errorbar(aes(ymin = (mean - se), ymax = (mean + se)), width = 0.2) +
+  labs(y = "Seedling Height",
+       x = "Treatment",
+       title = "Seedling Height at Every Treatment") 
 ```
 
 In this next chunk, generate a cleaned data set following the example below. As you examine your raw data and find things to fix, add a #Note to create a list of things to fix up. You can then use pipes and write code to fix each thing in your checklist. This is also where if you identified `filters` or data computations in your Hypothesis worksheet (e.g., choose only one species), you can apply those.
@@ -153,13 +186,30 @@ Read about joins here: <https://r4ds.hadley.nz/joins>
 Check out the illustrative animations on this page: <https://github.com/gadenbuie/tidyexplain?tab=readme-ov-file#mutating-joins>
 
 ```{r}
-Height_Data <- Height_Data_Raw |> 
+# use notes like this to create a checklist of the things that need to be fixed, then you can fill in code between each line as you fix them. 
+# Thing to fix #1: take out dead leaves as we are focusing on alive ones   
+# Thing to fix #2: combine both data sets to analyze spad and seedling only
+
+#pull spad data and filter out dead, select the columns you want to use for the combined dataset
+SPAD_Clean <- SPAD_Data_Raw %>% 
+  filter(Dead_Alive != "Dead") %>% 
+  select("Block", "Tag_Num", "Dead_Alive", "Num_leaves", "Treatment", "Leaf1", "Leaf2", "Leaf3", "Leaf4", "Leaf5", "Leaf6")
+
+#pull seedling height data and filter out dead, select the columns you want to use for the combined dataset
+Seedling_Clean <- Height_Data_Raw %>% 
+  filter(Dead_Alive != "Dead") %>% 
+  select("Seedling_Ht_cm", "Treatment", "Tag_Num", "Block")
+
+#combine the dataset and mesh block and tag number from both datasets
+SPAD_Seedling_Height_Data <- inner_join(SPAD_Clean, Seedling_Clean, by = c("Block", "Tag_Num"))
+
+#select the columns needed as there are duplicates and rename 
+Clean_Data <- SPAD_Seedling_Height_Data %>% 
+  select("Block", "Tag_Num", "Num_leaves", "Treatment.x", "Seedling_Ht_cm") %>% 
+  rename(Treatment = Treatment.x)
   
-  # use notes like this to create a checklist of the things that need to be fixed, then you can fill in code between each line as you fix them. 
-
-  # Thing to fix #2
-
-  # Thing to fix #3
+#open the cleaned table of combined data
+knitr::kable(Clean_Data)
 ```
 
 ### Regression dataset
@@ -168,11 +218,44 @@ Repeat the steps you took for your ANOVA data for your second data set of choice
 
 ```{r}
 # View data set
+view(Clean_Data)
 ```
 
 ```{r}
-Data <- _Raw |> 
-   
+#take out one site that has no variables and rename the dataset for anova
+anova_clean_data <- Clean_Data %>% 
+  filter(Treatment != "NR")
+#display the data that is going to be used for the ANOVA test
+show(anova_clean_data)
+#create a linear model from the dataset and the variables you want to test
+model1 <- lm(Num_leaves ~ Treatment, data = anova_clean_data)
+#plot the anova density data to see the relationship between treatment and seed height
+ggplot(anova_clean_data) + 
+  aes(x = Treatment, y = Num_leaves) + 
+  geom_boxplot()
+#create a QQ plot to see the standardized residuals from a fitted regression model 
+plot(model1, which = 2)
+#create a Shapiro-Wilk test on the residuals 
+shapiro.test(model1$residuals)
+#create a Bartlett test for density and site to see the homogeneity of variances 
+bartlett.test(Num_leaves~Treatment, data=anova_clean_data)
+#create an ANOVA of the statistical model to test significance
+anova(model1)
+#find which site is significantly different from each other after running the ANOVA test
+TukeyHSD(aov(Num_leaves~Treatment, data = anova_clean_data))
+#create the mean and standard error from the seed height to plot
+news_summary <- anova_clean_data |> 
+  group_by(Treatment) |>
+  summarise(mean = mean(Num_leaves), 
+            se = sd(Num_leaves)/sqrt(n()) )
+#plot your results with error bars and labels
+ggplot(news_summary) + 
+  aes(x = Treatment, y = mean) + 
+  geom_col() + 
+  geom_errorbar(aes(ymin = (mean - se), ymax = (mean + se)), width = 0.2) +
+  labs(y = "Number of Leaves",
+       x = "Treatment",
+       title = "Seedling Height at Every Treatment")    
   #Things to Fix
 ```
 
@@ -182,16 +265,68 @@ Now that your data is (probably, mostly!) clean, it is time to explore your data
 
 Not sure where to start?
 
-- Make a histogram of each variable and write down your observations
+-   Make a histogram of each variable and write down your observations
 
-- Plot variables against each other to explore relationships (boxplots and scatterplots are a good starting point)
+-   Plot variables against each other to explore relationships (boxplots and scatterplots are a good starting point)
 
-- Use facet_grid to explore different groupings of data
+-   Use facet_grid to explore different groupings of data
 
 **There are no wrong answers! If you make 3+ graphs and show you're thinking critically about them, you will get full credit for this assignment.**
 
 Go for it!
 
 ```{r}
+#rename data
+graph_clean_data <- anova_clean_data
+#make a histogram
+graph_clean_data |> 
+  ggplot(aes(x = Seedling_Ht_cm)) + 
+  geom_histogram(binwidth = 5) +
+  labs(
+    title = "Distribution of Seedling Height",
+    x = "Seedling Height (cm)",
+    y = "Seedlings Height Abundance"
+  ) 
+#my observations
+#In this graph, the seeds abundance the most from 7 cm to 15 cm. As the number of seedling increases, the abundance decreases displaying that there are shorter seeds in this experiment. The tallest seed is about 45cm which is an outlier from the rest of the observation in seedling height. 
+```
 
+```{r}
+#make a boxplot
+ggplot(Seedling_Clean, aes(x = Block, y = Seedling_Ht_cm)) +
+  geom_boxplot() +
+  labs(
+    title = "Seedling Height by Block",
+    x = "Block",
+    y = "Seedling Height (cm)"
+  ) 
+#my observations
+#In the graph, the seedlings ranged mostly around 23cm however, block 3 has the biggest range out of the 8 blocks. Block 2 and 5 had the smallest range but had an average of 21cm in seedling height. Block 1 had the second biggest range in seedling height however not as big as Block 3. The rest of the blocks were similarly the same range in seedling height. 
+
+#make a scatterplot
+ggplot(SPAD_Seedling_Height_Data,
+       aes(x = Num_leaves, y = Seedling_Ht_cm)) +
+  geom_point() +
+  labs(
+    title = "Seedling Height vs Number of Leaves",
+    x = "Number of Leaves",
+    y = "Seedling Height (cm)"
+  ) 
+#my observations
+#In the graph, the number of leaves ranges around 7-10cm in seedling height. As the number of leaves increase, the seedling height increased as well. The most number of leaves was about 88cm in seedling height and the tallest seedling height was above 83cm. This graph shows a positive correlation in the number of leaves and seedling height. 
+```
+
+```{r}
+#reorganize data using facet wrap
+ggplot(Seedling_Clean,
+       aes(x = Seedling_Ht_cm)) +
+  geom_histogram(binwidth = 15) +
+  facet_wrap(~Treatment) +
+  labs(
+    title = "Seedling Height Distribution by Treatment",
+    x = "Seedling Height (cm)",
+    y = "Seedling Height Abundance"
+  )
+#my observations 
+#In this graph, the seedling height that is the most abudant was adult canopy and the second abudant was dead tree. The biggest range of seedlings were in natural recruits and in open space the abundance of seedling heights displayed the same for all seedling heights in that treatment.
 ```

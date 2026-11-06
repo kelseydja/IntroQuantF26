@@ -14,14 +14,14 @@ Today we will play with a few datasets that fit these criteria.
 
 ### Steps for Correlation and Regression
 
-- Step 1: Look at your data. Is it tidy?
-- Step 2: Visualize the data
-- Step 3: Check your assumptions
-- Step 4: Apply transformations, if necessary
-- Step 5: Determine which test to use
-- Step 6: Write out your hypotheses
-- Step 7: Conduct the test
-- Step 8: Communicate results with a plot and writing.
+-   Step 1: Look at your data. Is it tidy?
+-   Step 2: Visualize the data
+-   Step 3: Check your assumptions
+-   Step 4: Apply transformations, if necessary
+-   Step 5: Determine which test to use
+-   Step 6: Write out your hypotheses
+-   Step 7: Conduct the test
+-   Step 8: Communicate results with a plot and writing.
 
 ### Load Data
 
@@ -82,6 +82,7 @@ hist(mayfly$Speed)
 
 ```{r}
 mayfly.lm <- lm(Abund ~ Speed, data = mayfly)
+plot(mayfly.lm)
 plot(mayfly.lm, which = 1)
 ```
 
@@ -115,11 +116,11 @@ If your data failed any of the assumptions, you have recourse! We will learn how
 
 #### Step 5: determine which test to use and which is the predictor/response
 
-- If NOT NORMAL (skewed) (and transformations fail), then the test to use is the the *Spearman's Rank test* (non-parametric).
+-   If NOT NORMAL (skewed) (and transformations fail), then the test to use is the the *Spearman's Rank test* (non-parametric).
 
-- If it IS NORMAL, then you can calculate a *Pearson's product moment*, or the correlation coefficient associated with a simple regression.
+-   If it IS NORMAL, then you can calculate a *Pearson's product moment*, or the correlation coefficient associated with a simple regression.
 
-- If your data is *ordinal* (i.e., categorical but in a strict order, like \[small medium large\]), then you can either do a Spearman or calculate the *Kendall's tau coefficient* (more specific to ordinal data)
+-   If your data is *ordinal* (i.e., categorical but in a strict order, like \[small medium large\]), then you can either do a Spearman or calculate the *Kendall's tau coefficient* (more specific to ordinal data)
 
 **Ask**: Which of these variables makes more sense as the predictor variable? Which is more sensible as the response variable?
 
@@ -129,17 +130,17 @@ Remember, *correlation does not mean causation!*
 
 For a Spearman's rank correlation:
 
-- H0: There is no correlation between stream speed and mayfly abundance. (rho = 0)
+-   H0: There is no correlation between stream speed and mayfly abundance. (rho = 0)
 
-- HA: There is a positive correlation between stream speed and mayfly abundance. (rho \> 0) or,
+-   HA: There is a positive correlation between stream speed and mayfly abundance. (rho \> 0) or,
 
-- HA: There is a negative correlation between stream speed and mayfly abundance (rho \< 0)
+-   HA: There is a negative correlation between stream speed and mayfly abundance (rho \< 0)
 
 for a Pearson's product moment test or simple linear regression:
 
-- H0: There is not a linear relationship between stream speed and mayfly abundance (slope = 0)
+-   H0: There is not a linear relationship between stream speed and mayfly abundance (slope = 0)
 
-- HA: There is a linear relationship between stream speed and mayfly abundance (slope != 0) or, greater than, or less than, etc.
+-   HA: There is a linear relationship between stream speed and mayfly abundance (slope != 0) or, greater than, or less than, etc.
 
 #### Step 7: Conduct the test
 
@@ -287,14 +288,14 @@ Example: Water flow speed linearly predicted abundance of mayflies, explaining 7
 
 ## Great! What about less simple, non-linear regression? there are relationships that aren't linear.
 
-- Step 1: Look at your data. Is it tidy?
-- Step 2: Visualize the data
-- Step 3: Check your assumptions
-- Step 4: Apply transformations, if necessary
-- Step 5: Determine which test to use
-- Step 6: Write out your hypotheses
-- Step 7: Conduct the test
-- Step 8: Communicate results with a plot and writing.
+-   Step 1: Look at your data. Is it tidy?
+-   Step 2: Visualize the data
+-   Step 3: Check your assumptions
+-   Step 4: Apply transformations, if necessary
+-   Step 5: Determine which test to use
+-   Step 6: Write out your hypotheses
+-   Step 7: Conduct the test
+-   Step 8: Communicate results with a plot and writing.
 
 #### Step 1: Look at your data. Is it tidy?
 
@@ -376,8 +377,8 @@ pg_plot <- ggplot(pg) +
 Then we can also add our text to the plot with the equation and R-squared or whatever other information.
 
 ```{r}
-summary(pg.lm)
-
+summary(pg.lm)$r.squared
+summary(pg.lm)$coefficients
 
 pg_plot_plusline + 
   geom_text(x = 30, y= 5, label = "R-squared = 0.95, y = 5.10 ln(x) + 0.69")
@@ -390,13 +391,15 @@ Not all linear data looks like a straight line. Sometimes a relationship can be 
 #### Step 1: What does the data look like?
 
 ```{r}
-
+bbel
 ```
 
 #### Step 2: Visualize the data
 
 ```{r}
-bbel_plot <- 
+bbel_plot <- ggplot(bbel) + 
+  aes(x = light, y = abund) + 
+  geom_point()
 
 bbel_plot
 ```
@@ -414,9 +417,10 @@ The `I()` tells R to "isolate" that segment and treat it properly here - just a 
 #### Run the model
 
 ```{r}
-bbel.lm <- 
+bbel.lm <- lm(abund ~ light + I(light^2), data = bbel)
+
  
-summary()
+summary(bbel.lm)
 ```
 
 Notice how this has given us three estimates - this is for `a`, `b` and `c` in our equation above.
@@ -427,7 +431,7 @@ If we plug these values into our equation above, we get a fitted line with the e
 
 ```{r}
 bbel_plot +
-  geom_smooth(method = , formula = , se = )
+  geom_smooth(method = "lm", formula = y ~ x + I(x^2), se = FALSE)
 ```
 
 Neat-o!
@@ -448,11 +452,11 @@ View()
 ## Multiple Linear Regression
 
 ```{r}
-load()
+load(file = "Demo Data Files/S4E2e.RData")
 
-guppy <- read.csv()
-lions <- read.csv()
-earthworms <- read.csv()
+guppy <- read.csv(file = "Demo Data Files/chap17f9_1GuppyColdDeath.csv")
+lions <- read.csv(file = "Demo Data Files/chap17e1LionNoses.csv")
+earthworms <- read.csv(file = "Demo Data Files/chap17q17EarthwormsAndNitrogen.csv")
 
 ```
 
@@ -465,20 +469,20 @@ Basic format:
 These data show the abundance of butterflies and the availability of food plants and nectar resources.
 
 ```{r}
-glimpse()
+glimpse(mf)
 ```
 
 ```{r}
-bff.lm <- lm(, data = )
-
+bff.lm <- lm(count ~ food + nectar, data = bff)
+summary(bff.lm)
 ```
 
 ### Viewing the Regression Coefficients
 
 ```{r}
-coef() 
- # Calling only one of the coefficients
-# another way to do the same thing
+coef(bff.lm) 
+coef(bff.lm)[2] # Calling only one of the coefficients
+coef(bff.lm)["food"] # another way to do the same thing
 ```
 
 The regression coefficients are used by the model, but if we want an equivalent to the slope (i.e., a per unit influence of each predictor on the response), the we need to calculate the beta coefficients for each variable.
@@ -490,13 +494,13 @@ Mathematically, the beta coefficient is calculated:
 Beta coefficient for predictor variable FOOD:
 
 ```{r}
-coef()[] * 
+coef(bff.lm)[2] * sd(bff$food) / sd(bff$count)
 ```
 
 Beta coefficient for predictor variable NECTAR:
 
 ```{r}
-coef()[] * 
+coef(bff.lm)["nectar"] * sd(bff$nectar)/sd(bff$count)
 ```
 
 So that's all well and good when we only have a few predictor variables, and can drop the ones that aren't significant.
@@ -510,7 +514,7 @@ The goal of regression is to find the best fit model to explain the data - and t
 View the data:
 
 ```{r}
-glimpse()
+glimpse(mf)
 ```
 
 Remember the mayflies? In the last exercise we only tested the effect of Speed, but many things could affect the length of a mayfly! What variables best predict length of mayflies?
@@ -522,7 +526,7 @@ Where to begin? We might start out by seeing which variables we expect to be imp
 This function makes a correlation matrix looking at the relationship of each variable to all the others.
 
 ```{r}
- %>% 
+cor(mf) %>% round(2)
 ```
 
 #### Step 2: Select your first variable
@@ -532,8 +536,8 @@ Since length is our RESPONSE variable, we look at the first column/row (they're 
 Which factor has the highest absolute value? Let's add that one first and run a simple model.
 
 ```{r}
-mod <- lm()
-
+mod <- lm(Length ~ BOD, data = mf)
+summary(mod)
 ```
 
 #### Step 3: Decide if additional variables are appropriate using stepwise testing.
@@ -541,14 +545,14 @@ mod <- lm()
 Adding other predictors we need to justify whether they add something to the model - either by expert opinion (it should be important), or because they aren't collinear and explain other parts of the variation. We can test whether one model is better than another using an anova.
 
 ```{r}
-fit1 <- 
-fit1 <- 
-summary()
-fit2 <- lm()
+fit1 <- lm(Length ~ BOD, data=mf)
+fit1 <- lm(Length ~ Algae, data=mf)
+summary(fit1)
+fit2 <- lm(Length ~ BOD +  Algae, data=mf)
 
-plot( ~ , data = )
-summary(=)
-
+plot(BOD ~ Algae, data = mf)
+summary(fit2)
+anova(fit1, fit2)
 ```
 
 #### Step 4: Assess model fit and results
@@ -560,7 +564,7 @@ Why weren't the other variables significant anymore?
 Look back at the correlation matrix.
 
 ```{r}
-cor()
+cor(mf)
 ```
 
 ### Step 5: Report results

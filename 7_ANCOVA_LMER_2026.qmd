@@ -119,24 +119,24 @@ Different ways of formulating the model or computing the outputs alters the way 
 
 ### Type I, II and III Sum of Squares and when to use them
 
-- **Type I** Sum of Squares examines the variables sequentially; the order you add them to the formula (i.e., y \~ a \* b is different from y \~ b \* a) is the order in which it partitions off the variation. The second variable gets the leftovers.
-  - Use only when your sample sizes are balanced
+-   **Type I** Sum of Squares examines the variables sequentially; the order you add them to the formula (i.e., y \~ a \* b is different from y \~ b \* a) is the order in which it partitions off the variation. The second variable gets the leftovers.
+    -   Use only when your sample sizes are balanced
 
 ```{r}
         # how to get results of Type I SS
         anova(TCModel_ANCOVA_withInt)
 ```
 
-- **Type II** Sum of Squares adjusts variable for main effects, but not for interactions.
-  - Use this output if your interaction is not significant.
+-   **Type II** Sum of Squares adjusts variable for main effects, but not for interactions.
+    -   Use this output if your interaction is not significant.
 
 ```{r}
         # how to get results of Type II SS
         car::Anova(TCModel_ANCOVA_withInt, type = "II")
 ```
 
-- **Type III** Sum of Squares gives you the result of when each variable is adjusted for the effect of all other variables; the main effects will be adjusted if there is an interaction specified.
-  - Use this output if you interaction IS significant.
+-   **Type III** Sum of Squares gives you the result of when each variable is adjusted for the effect of all other variables; the main effects will be adjusted if there is an interaction specified.
+    -   Use this output if you interaction IS significant.
 
 ```{r}
         # how to get results of Type III SS
